@@ -1,0 +1,132 @@
+# Tema #2 PCLP - Simulator de Octave
+
+Nume: Alexandru Alin-Ioan
+
+Seria: CA
+
+Grupa: 312CA
+
+## Descrierea temei
+
+Gigel a fost putin prea curios de ce o sa invete la metode numerice si a decis
+sa scrie un programel care sa realizeze diverse operatii cu matrice.
+
+## Rulare
+
+### Comenzile programului
+
+L - Incarca o matrice in memorie
+
+D - Afiseaza dimensiunile matricei
+
+P - Afiseaza matricea
+
+C - Redimensionarea matricei
+
+M - Inmultirea a doua matrice
+
+O - Sortarea listei de matrice
+
+T - Transpunerea matricei
+
+R - Ridicarea la putere a unei matrice
+
+S - Inmultire folosind algoritmul lui Strassen
+
+F - Stergerea unui singur elemnt din lista
+
+Q - Terminarea programului
+
+## Structura proiectului
+
+### Makefile
+
+* Contine regulile build si clean
+
+### my_octave_lib.h
+
+* Contine declararea structurii folosita pentru implementarea unei liste de
+matrice.
+* Contine declararea celor mai importante functii folosite.
+
+### my_octave.c
+
+* Main-ul proiectului.
+* Preia comanda de la tastatura si apeleaza functia corespunzatoare.
+* Pentru a transmite lista de matrice catre aceste functii se folosesc doua
+variabile de tip struct ce reprezinta primul si respectiv ultimul element al
+listei.
+
+### load_matrix.c
+
+* Contine functiile de alocare, initializare si citire a listei de matrice si
+a elementelor acesteia.
+* Suma elementelor matricei este un camp al structurii si se calculeaza imediat
+dupa citire.
+* Contine si functia penru adunare folosind modulo.
+
+### free_memory.c
+
+* Contine functiile de eliberare a memoriei pentru lista si pentru elementele
+acesteia.
+* Aici se realizeaza si functia pentru eliberarea unui singur element din lista
+(comanda "F").
+    * Pentru aceasta a fost necesara si restabilirea legaturilor in cadrul
+listei inlantuite in urma eliberarii memoriei.
+
+### matrix_operations.c
+
+* Contine majoritatea functiilor pentru calculele cu matrice.
+* Pentru a accesa elementul listei cu indexul cerut se parcurge lista pronind
+de la primul element.
+* Redimensionarea matricei:
+    * S-au alocat doua siruri care sa retina linile si coloanele matricei
+    rezultat.
+    * Matricea redimensionata a fost determinata folosind valorile din sirurile
+    de coloane si linii
+    * Se recalculeaza suma elementelor si se elibereaza tablourile auxiliare.
+* Inmultirea a doua matrice:
+    * Se verifica daca dimensiunile celor doua matrice sunt potrivite pentru
+    inmultire.
+    * Calculele propriuzise sunt realizate intr-o alta functie folosind
+    algoritmul cu 3 for-uri.
+    * Rezultatul returnat de functia anterioara este adaugat unui nou nod al
+    listei si se calculeaza suma elementelor matricei.
+* Transpusa:
+    * In cazul in care matricea este patratica s-au inversat elementele de
+    deasupra diagonalei principale cu cele de sub diagonala.
+    * Pentru matricele oarecare s-a alocat o noua matrice cu numarul de linii
+    si coloane inversat fata de matricea initiala, iar apoi au fost facute
+    atribuirile necesare.
+* Ridicarea la putere:
+    * S-a folosit algoritmul de exponentiere rapida.
+    * Pentru inmultire s-a folosit functia de calcul a inmultirii a doua
+    matrice.
+    * La fiecare pas al ridicarii la putere s-a eliberat matricea calculata
+    precedent.
+* Sortarea listei:
+    * S-a folosit algoritmul de selection sort.
+    * Suma elementelor a fost calculata precedent asa cum a fost mentionat.
+
+### strassen.c
+
+* Contine o functie pentru adunarea sau scaderea a doua matrice.
+* Implementarea algorimului lui Strassen pentru inmultirea a doua matrice
+patratice al caror numar de elemente este 2^n.
+    * Ambele matrice au fost impartie in alte 4 sub-matrice. Impartirea s-a
+    realizat folosind functii ajutatoare.
+    * Calculeaza matricele intermediare "M" folosind formulele corespunzatoare.
+        * Inmultirea se realizeaza recursiv.
+    * Reconstruieste matricea rezultat folosind matricele intermediare, cu
+    ajutorul altor functii.
+* Functia pentru setup aloca memoria pentru un nou element al listei,
+initializeaza si calculeaza valori si stabileste legaturile in cadrul listei.
+
+## Alte precizari
+
+* De fiecare data cand am alocat o noua matrice am verificat daca alocarea este
+posibila (programare defensiva). Programul nu se opreste cand o alocare nu se
+poate realiza, deoarce am considerat ca alte operatii ar putea fi inca valide.
+* In cazul in care avem foarte multe matrice nu am testat daca programarea
+defensifa functioneaza si operatia specifica se opreste. Mi-ar fi foarte greu
+sa introduc la intrare miloane sau chiar miliarde de matrice.
